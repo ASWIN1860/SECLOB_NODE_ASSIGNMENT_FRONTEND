@@ -1,7 +1,7 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
-import Header from "./Header";
+import Header from "../components/Header";
 
 function ProductDetails() {
   return (
