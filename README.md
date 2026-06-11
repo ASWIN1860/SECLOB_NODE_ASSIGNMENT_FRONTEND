@@ -8,9 +8,7 @@ A full-stack Product Management Application developed as part of a technical ass
 
 ## Live Demo
 
-Frontend: https://your-vercel-link.vercel.app
-
-Backend: https://your-render-link.onrender.com
+Frontend:"https://seclob-node-assignment-frontend.vercel.app/"
 
 ---
 
