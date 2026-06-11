@@ -217,7 +217,7 @@ function ProductDetails() {
               {/* Buttons */}
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <button className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600">
+                <button onClick={()=>navigate(`/edit-product/${id}`)} className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600">
                   Edit Product
                 </button>
 

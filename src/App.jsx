@@ -7,6 +7,7 @@ import Authpage from "./Pages/Authpage";
 import Home from "./Pages/Home";
 import ProductDetails from "./Pages/ProductDetails";
 import Wishlist from "./Pages/Whishlist";
+import EditProduct from "./Pages/EditProduct";
 
 const ProtectedRoute = ({ children }) => {
   return sessionStorage.getItem("token") ? children : <Navigate to="/" />;
@@ -24,6 +25,7 @@ function App() {
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/productdetails/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
         <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+        <Route path="/edit-product/:id" element={<ProtectedRoute><EditProduct/></ProtectedRoute>} />
       </Routes>
       <ToastContainer />
     </>

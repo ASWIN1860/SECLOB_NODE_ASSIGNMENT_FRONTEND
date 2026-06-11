@@ -45,6 +45,7 @@ function Authpage() {
       if (response.status === 200) {
         sessionStorage.setItem("token", response?.data?.token);
         sessionStorage.setItem("userId", response?.data?.userId);
+        sessionStorage.setItem("username", response?.data?.username);
         toast.success("Signin Successful");
         setUser({ username: "", email: "", password });
         navigate("/home");

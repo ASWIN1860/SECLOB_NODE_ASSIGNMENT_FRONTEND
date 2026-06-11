@@ -217,8 +217,8 @@ function Home() {
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 h-[85vh] bg-white shadow-lg p-5">
-          <h2 className="font-bold text-2xl text-center mb-4">Categories</h2>
+        <aside className="w-64 h-[91vh] bg-white shadow-lg p-5">
+          <h2 className="font-bold text-2xl text-center mb-4 pt-3">Categories</h2>
 
           <button
             onClick={() => {
@@ -262,24 +262,24 @@ function Home() {
         {/* Main Content */}
         <main className="flex-1 p-8">
           <div className="flex justify-between mb-6">
-            <h2 className="text-2xl font-bold">Products</h2>
+            <h2 className="text-3xl font-bold">Products</h2>
 
             <div className="flex gap-2">
               <button
                 onClick={() => setShowCategoryModal(true)}
-                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer"
+                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer font-semibold"
               >
                 Add Category
               </button>
               <button
                 onClick={() => setShowSubCategoryModal(true)}
-                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer"
+                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer font-semibold"
               >
                 Add SubCategory
               </button>
               <button
                 onClick={() => setShowProductModal(true)}
-                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer"
+                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer font-semibold"
               >
                 Add Product
               </button>
@@ -324,7 +324,7 @@ function Home() {
 
                 <button
                   onClick={() => navigate(`/productdetails/${item._id}`)}
-                  className="mt-3 bg-[#003B5C] text-white w-full py-2 rounded-lg cursor-pointer"
+                  className="mt-3 bg-[#003B5C] text-white w-full py-2 rounded-lg cursor-pointer font-semibold"
                 >
                   View Details
                 </button>

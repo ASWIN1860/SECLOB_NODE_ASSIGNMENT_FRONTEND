@@ -1,12 +1,22 @@
-import React from "react";
+import React,{ useState,useEffect } from "react";
 import { FaCartArrowDown } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { CiViewList } from "react-icons/ci";
 import { IoMdLogOut } from "react-icons/io";
+import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 function Header({ searchKey, setSearchKey }) {
+ 
+  const [username,setUsername]=useState('')
   const navigate = useNavigate();
+
+  useEffect(()=>{
+   const user=sessionStorage.getItem('username');
+   if(user){
+    setUsername(user)
+   }
+  },[])
 
   const handleLogout = () => {
     sessionStorage.clear();
@@ -15,9 +25,9 @@ function Header({ searchKey, setSearchKey }) {
 
   return (
     <>
-      <div className="min-h-24 bg-gray-100">
+      <div className="min-h-16 bg-gray-100">
         <nav className="fixed w-full bg-[#003B5C] text-white px-8 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-bold">ProductManagement</h1>
+          <h1 className="text-2xl font-semibold">ProductManagement</h1>
 
           <div>
             <input
@@ -25,8 +35,12 @@ function Header({ searchKey, setSearchKey }) {
               value={searchKey}
               onChange={(e) => setSearchKey(e.target.value)}
               placeholder="Search Product"
-              className="bg-white text-black px-4 py-2 rounded-md w-80"
+              className="bg-white text-black px-4 py-2 rounded-md w-80 font-semibold"
             />
+          </div>
+
+          <div className="flex ">
+            <h1 className="flex items-center justify-center gap-1 font-bold"><FaUserCircle />{username}</h1>
           </div>
 
           <div className="flex gap-6 ">

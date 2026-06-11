@@ -27,7 +27,7 @@ export const getAllCategoriesApi=async()=>{
     return await commonApi(`${base_Url}/all-category`,'GET',{},header)
 }
 
-//get all subcategory
+//get all product subcategory
 export const getAllSubCategoriesApi=async()=>{
      const header={
         "Authorization":`Token ${sessionStorage.getItem('token')}`
@@ -43,7 +43,7 @@ export const getSingleProductApi=async (id)=>{
     return await commonApi(`${base_Url}/single-product/${id}`,'GET',{},header)
 }
 
-//add category
+//add product category
 export const addCategoryApi=async(data)=>{
     const header={
         "Authorization":`Token ${sessionStorage.getItem('token')}`
@@ -51,7 +51,7 @@ export const addCategoryApi=async(data)=>{
     return await commonApi(`${base_Url}/add-category`,'POST',data,header)
 }
 
-//add subcategory
+//add product subcategory
 export const addSubCategoryApi=async(data)=>{
     const header={
         "Authorization":`Token ${sessionStorage.getItem('token')}`
@@ -65,6 +65,14 @@ export const addProductApi=async(data)=>{
         "Authorization":`Token ${sessionStorage.getItem('token')}`
     }
     return await commonApi(`${base_Url}/add-products`,'POST',data,header)
+}
+
+//update  product
+export const updateProductApi=async(id,reqBody)=>{
+     const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/product/${id}`,'PUT',reqBody,header)
 }
 
 //add wishlist
