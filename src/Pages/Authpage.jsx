@@ -14,6 +14,7 @@ function Authpage() {
     password: "",
   });
 
+  //Register
   const handleRegister = async () => {
     const { username, email, password } = user;
     if (!username || !email || !password) {
@@ -30,6 +31,7 @@ function Authpage() {
     }
   };
 
+  //Login
   const handleLogin = async () => {
     const { email, password } = user;
     console.log(user);
@@ -42,6 +44,7 @@ function Authpage() {
       console.log("data",response?.data)
       if (response.status === 200) {
         sessionStorage.setItem("token", response?.data?.token);
+        sessionStorage.setItem("userId", response?.data?.userId);
         toast.success("Signin Successful");
         setUser({ username: "", email: "", password });
         navigate("/home");
@@ -106,7 +109,7 @@ function Authpage() {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full  p-3 rounded bg-gray-200  mb-4"
+                className="w-full  p-2 rounded bg-gray-200  mb-4"
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
                 value={user.email}
                 required
@@ -115,7 +118,7 @@ function Authpage() {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full  p-3 rounded bg-gray-200 mb-4"
+                className="w-full  p-2 rounded bg-gray-200 mb-4"
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 value={user.password}
                 required
@@ -136,7 +139,7 @@ function Authpage() {
               <input
                 type="text"
                 placeholder="Username"
-                className="w-full  p-3 rounded  bg-gray-200 mb-4"
+                className="w-full  p-2 rounded  bg-gray-200 mb-4"
                 onChange={(e) => setUser({ ...user, username: e.target.value })}
                 value={user.username}
                 required
@@ -145,7 +148,7 @@ function Authpage() {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full  p-3 rounded  bg-gray-200 mb-4"
+                className="w-full  p-2 rounded  bg-gray-200 mb-4"
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
                 value={user.email}
                 required
@@ -154,7 +157,7 @@ function Authpage() {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full  p-3 rounded bg-gray-200 mb-4"
+                className="w-full  p-2 rounded bg-gray-200 mb-4"
                 onChange={(e) => setUser({ ...user, password: e.target.value })}
                 value={user.password}
                 required

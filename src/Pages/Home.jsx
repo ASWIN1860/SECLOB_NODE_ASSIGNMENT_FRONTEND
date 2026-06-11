@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 import {
   getAllProductsApi,
   getAllCategoriesApi,
@@ -8,6 +10,8 @@ import {
   addCategoryApi,
   addSubCategoryApi,
   addProductApi,
+  addWishlistApi,
+  getWishlistApi,
 } from "../services/allApis";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +35,8 @@ function Home() {
   const [subCategoryName, setSubCategoryName] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
+  const [wishlist, setWishlist] = useState([]);
+
   const [showProductModal, setShowProductModal] = useState(false);
   const [productData, setProductData] = useState({
     productName: "",
@@ -38,9 +44,10 @@ function Home() {
     imageUrl: "",
     categoryId: "",
     subCategoryId: "",
-    variants: [{ ram: "", price: "", qty: "" }]
+    variants: [{ ram: "", price: "", qty: "" }],
   });
 
+  //add category
   const handleAddCategory = async () => {
     try {
       const res = await addCategoryApi({ categoryName });
@@ -50,12 +57,18 @@ function Home() {
         setCategoryName("");
         getCategories();
       }
-    } catch (err) { console.log(err); }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  //add sub category
   const handleAddSubCategory = async () => {
     try {
-      const res = await addSubCategoryApi({ categoryId: selectedCategoryId, subCategoryName });
+      const res = await addSubCategoryApi({
+        categoryId: selectedCategoryId,
+        subCategoryName,
+      });
       if (res.status === 200) {
         toast.success("Sub-Category added successfully");
         setShowSubCategoryModal(false);
@@ -63,9 +76,12 @@ function Home() {
         setSelectedCategoryId("");
         getSubCategories();
       }
-    } catch (err) { console.log(err); }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  //add product
   const handleAddProduct = async () => {
     try {
       const res = await addProductApi(productData);
@@ -73,23 +89,36 @@ function Home() {
         toast.success("Product added successfully");
         setShowProductModal(false);
         setProductData({
-          productName: "", description: "", imageUrl: "", categoryId: "", subCategoryId: "", variants: [{ ram: "", price: "", qty: "" }]
+          productName: "",
+          description: "",
+          imageUrl: "",
+          categoryId: "",
+          subCategoryId: "",
+          variants: [{ ram: "", price: "", qty: "" }],
         });
         getProducts();
       }
-    } catch (err) { console.log(err); }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  //add varient
   const addVariant = () => {
-    setProductData({...productData, variants: [...productData.variants, {ram: "", price: "", qty: ""}]});
+    setProductData({
+      ...productData,
+      variants: [...productData.variants, { ram: "", price: "", qty: "" }],
+    });
   };
 
+  //update varient
   const updateVariant = (index, field, value) => {
     const newVariants = [...productData.variants];
     newVariants[index][field] = value;
-    setProductData({...productData, variants: newVariants});
+    setProductData({ ...productData, variants: newVariants });
   };
 
+  //get product
   const getProducts = async () => {
     try {
       const result = await getAllProductsApi(
@@ -107,6 +136,7 @@ function Home() {
     }
   };
 
+  //get category
   const getCategories = async () => {
     try {
       const result = await getAllCategoriesApi();
@@ -119,6 +149,7 @@ function Home() {
     }
   };
 
+  //get sub categories
   const getSubCategories = async () => {
     try {
       const result = await getAllSubCategoriesApi();
@@ -131,10 +162,49 @@ function Home() {
     }
   };
 
+  //add to wishlist
+  const handleWishlist = async (productId) => {
+    try {
+      const reqBody = {
+        userId: sessionStorage.getItem("userId"),
+        productId,
+      };
+
+      const result = await addWishlistApi(reqBody);
+
+      if (result.status === 200) {
+        setWishlist([...wishlist, productId]);
+        toast.success("Added to Wishlist");
+      }
+    } catch (err) {
+      console.log(err);
+      if (err.response?.status === 400) {
+        toast.info("Already in wishlist");
+      } else {
+        toast.error("Failed to add wishlist");
+      }
+    }
+  };
+
+  //get wishlist
+  const getUserWishlist = async () => {
+    try {
+      const userId = sessionStorage.getItem("userId");
+      const result = await getWishlistApi(userId);
+      if (result.status === 200) {
+        // Extract product IDs into the state array
+        setWishlist(result.data.map((item) => item.productId?._id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     console.log(searchKey);
     getCategories();
     getSubCategories();
+    getUserWishlist();
   }, []);
 
   useEffect(() => {
@@ -147,7 +217,7 @@ function Home() {
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 min-h-screen bg-white shadow-lg p-5">
+        <aside className="w-64 h-[85vh] bg-white shadow-lg p-5">
           <h2 className="font-bold text-2xl text-center mb-4">Categories</h2>
 
           <button
@@ -195,15 +265,24 @@ function Home() {
             <h2 className="text-2xl font-bold">Products</h2>
 
             <div className="flex gap-2">
-              <button onClick={() => setShowCategoryModal(true)} className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer">
-              Add Category
-            </button>
-            <button onClick={() => setShowSubCategoryModal(true)} className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer">
-              Add SubCategory
-            </button>
-            <button onClick={() => setShowProductModal(true)} className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer">
-              Add Product
-            </button>
+              <button
+                onClick={() => setShowCategoryModal(true)}
+                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer"
+              >
+                Add Category
+              </button>
+              <button
+                onClick={() => setShowSubCategoryModal(true)}
+                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer"
+              >
+                Add SubCategory
+              </button>
+              <button
+                onClick={() => setShowProductModal(true)}
+                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer"
+              >
+                Add Product
+              </button>
             </div>
           </div>
 
@@ -212,7 +291,16 @@ function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             {products?.map((item) => (
               <div key={item._id} className="bg-white rounded-xl shadow-md p-4">
-                <button className="float-right text-red-500 text-xl">♡</button>
+                <button
+                  onClick={() => handleWishlist(item._id)}
+                  className={`float-right text-red-500 text-xl cursor-pointer`}
+                >
+                  {wishlist.includes(item._id) ? (
+                    <FaHeart className="text-red-500 text-2xl" />
+                  ) : (
+                    <CiHeart className="text-2xl" />
+                  )}
+                </button>
 
                 <img
                   src={item.imageUrl}
@@ -282,63 +370,112 @@ function Home() {
 
       {/* Modals */}
       {showCategoryModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow-2xl border border-gray-200 w-96 text-center relative pointer-events-auto">
-            <button onClick={() => setShowCategoryModal(false)} className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl">&times;</button>
+            <button
+              onClick={() => setShowCategoryModal(false)}
+              className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl"
+            >
+              &times;
+            </button>
             <h3 className="text-lg font-bold mb-4">Add Category</h3>
-            <input 
-              type="text" 
-              placeholder="Enter category name" 
+            <input
+              type="text"
+              placeholder="Enter category name"
               className="border p-2 w-full rounded mb-4"
               value={categoryName}
-              onChange={(e)=>setCategoryName(e.target.value)}
+              onChange={(e) => setCategoryName(e.target.value)}
             />
             <div className="flex justify-center gap-4 mt-4">
-              <button onClick={handleAddCategory} className="bg-yellow-500 text-white px-6 py-2 rounded-lg font-semibold">ADD</button>
-              <button onClick={()=>setShowCategoryModal(false)} className="border px-6 py-2 rounded-lg font-semibold">DISCARD</button>
+              <button
+                onClick={handleAddCategory}
+                className="bg-yellow-500 text-white px-6 py-2 rounded-lg font-semibold"
+              >
+                ADD
+              </button>
+              <button
+                onClick={() => setShowCategoryModal(false)}
+                className="border px-6 py-2 rounded-lg font-semibold"
+              >
+                DISCARD
+              </button>
             </div>
           </div>
         </div>
       )}
 
       {showSubCategoryModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow-2xl border border-gray-200 w-96 text-center relative pointer-events-auto">
-            <button onClick={() => setShowSubCategoryModal(false)} className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl">&times;</button>
+            <button
+              onClick={() => setShowSubCategoryModal(false)}
+              className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl"
+            >
+              &times;
+            </button>
             <h3 className="text-lg font-bold mb-4">Add Sub-Category</h3>
-            <select 
+            <select
               className="border p-2 w-full rounded mb-4"
               value={selectedCategoryId}
-              onChange={(e)=>setSelectedCategoryId(e.target.value)}
+              onChange={(e) => setSelectedCategoryId(e.target.value)}
             >
               <option value="">Select category</option>
-              {categories.map(c => <option key={c._id} value={c._id}>{c.categoryName}</option>)}
+              {categories.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.categoryName}
+                </option>
+              ))}
             </select>
-            <input 
-              type="text" 
-              placeholder="Enter sub-category name" 
+            <input
+              type="text"
+              placeholder="Enter sub-category name"
               className="border p-2 w-full rounded mb-4"
               value={subCategoryName}
-              onChange={(e)=>setSubCategoryName(e.target.value)}
+              onChange={(e) => setSubCategoryName(e.target.value)}
             />
             <div className="flex justify-center gap-4 mt-4">
-              <button onClick={handleAddSubCategory} className="bg-yellow-500 text-white px-6 py-2 rounded-lg font-semibold">ADD</button>
-              <button onClick={()=>setShowSubCategoryModal(false)} className="border px-6 py-2 rounded-lg font-semibold">DISCARD</button>
+              <button
+                onClick={handleAddSubCategory}
+                className="bg-yellow-500 text-white px-6 py-2 rounded-lg font-semibold"
+              >
+                ADD
+              </button>
+              <button
+                onClick={() => setShowSubCategoryModal(false)}
+                className="border px-6 py-2 rounded-lg font-semibold"
+              >
+                DISCARD
+              </button>
             </div>
           </div>
         </div>
       )}
 
       {showProductModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm">
           <div className="bg-white p-8 rounded-lg shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative pointer-events-auto">
-            <button onClick={() => setShowProductModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-red-500 font-bold text-2xl">&times;</button>
+            <button
+              onClick={() => setShowProductModal(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-red-500 font-bold text-2xl"
+            >
+              &times;
+            </button>
             <h3 className="text-lg font-bold mb-6 text-center">Add Product</h3>
-            
+
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-4">
                 <label className="w-32 font-medium text-left">Title :</label>
-                <input type="text" className="border p-2 flex-1 rounded" value={productData.productName} onChange={(e)=>setProductData({...productData, productName: e.target.value})} />
+                <input
+                  type="text"
+                  className="border p-2 flex-1 rounded"
+                  value={productData.productName}
+                  onChange={(e) =>
+                    setProductData({
+                      ...productData,
+                      productName: e.target.value,
+                    })
+                  }
+                />
               </div>
 
               <div className="flex gap-4">
@@ -347,55 +484,145 @@ function Home() {
                   {productData.variants.map((v, i) => (
                     <div key={i} className="flex gap-2 items-center">
                       <span className="text-sm">Ram :</span>
-                      <input type="text" className="border p-1 w-16 rounded" value={v.ram} onChange={(e)=>updateVariant(i, 'ram', e.target.value)} />
+                      <input
+                        type="text"
+                        className="border p-1 w-16 rounded"
+                        value={v.ram}
+                        onChange={(e) =>
+                          updateVariant(i, "ram", e.target.value)
+                        }
+                      />
                       <span className="text-sm">Price :</span>
-                      <input type="number" className="border p-1 w-24 rounded" value={v.price} onChange={(e)=>updateVariant(i, 'price', e.target.value)} />
+                      <input
+                        type="number"
+                        className="border p-1 w-24 rounded"
+                        value={v.price}
+                        onChange={(e) =>
+                          updateVariant(i, "price", e.target.value)
+                        }
+                      />
                       <span className="text-sm">Qty :</span>
-                      <input type="number" className="border p-1 w-16 rounded" value={v.qty} onChange={(e)=>updateVariant(i, 'qty', e.target.value)} />
+                      <input
+                        type="number"
+                        className="border p-1 w-16 rounded"
+                        value={v.qty}
+                        onChange={(e) =>
+                          updateVariant(i, "qty", e.target.value)
+                        }
+                      />
                     </div>
                   ))}
                   <div className="flex justify-end">
-                     <button onClick={addVariant} className="bg-gray-800 text-white px-4 py-1 rounded text-sm mt-1">Add variants</button>
+                    <button
+                      onClick={addVariant}
+                      className="bg-gray-800 text-white px-4 py-1 rounded text-sm mt-1"
+                    >
+                      Add variants
+                    </button>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
                 <label className="w-32 font-medium text-left">Category :</label>
-                <select className="border p-2 flex-1 rounded" value={productData.categoryId} onChange={(e)=>setProductData({...productData, categoryId: e.target.value})}>
-                   <option value="">Select Category</option>
-                   {categories.map(c => <option key={c._id} value={c._id}>{c.categoryName}</option>)}
+                <select
+                  className="border p-2 flex-1 rounded"
+                  value={productData.categoryId}
+                  onChange={(e) =>
+                    setProductData({
+                      ...productData,
+                      categoryId: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((c) => (
+                    <option key={c._id} value={c._id}>
+                      {c.categoryName}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="flex items-center gap-4">
-                <label className="w-32 font-medium text-left">Sub-category :</label>
-                <select className="border p-2 flex-1 rounded" value={productData.subCategoryId} onChange={(e)=>setProductData({...productData, subCategoryId: e.target.value})}>
-                   <option value="">Select Sub-Category</option>
-                   {subCategories.filter(s => s.categoryId?._id === productData.categoryId || s.categoryId === productData.categoryId).map(s => <option key={s._id} value={s._id}>{s.subCategoryName}</option>)}
+                <label className="w-32 font-medium text-left">
+                  Sub-category :
+                </label>
+                <select
+                  className="border p-2 flex-1 rounded"
+                  value={productData.subCategoryId}
+                  onChange={(e) =>
+                    setProductData({
+                      ...productData,
+                      subCategoryId: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">Select Sub-Category</option>
+                  {subCategories
+                    .filter(
+                      (s) =>
+                        s.categoryId?._id === productData.categoryId ||
+                        s.categoryId === productData.categoryId,
+                    )
+                    .map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.subCategoryName}
+                      </option>
+                    ))}
                 </select>
               </div>
 
               <div className="flex gap-4">
-                <label className="w-32 font-medium text-left">Description :</label>
-                <textarea className="border p-2 flex-1 rounded" rows="3" value={productData.description} onChange={(e)=>setProductData({...productData, description: e.target.value})}></textarea>
+                <label className="w-32 font-medium text-left">
+                  Description :
+                </label>
+                <textarea
+                  className="border p-2 flex-1 rounded"
+                  rows="3"
+                  value={productData.description}
+                  onChange={(e) =>
+                    setProductData({
+                      ...productData,
+                      description: e.target.value,
+                    })
+                  }
+                ></textarea>
               </div>
 
               <div className="flex items-center gap-4">
-                <label className="w-32 font-medium text-left">Image URL :</label>
-                <input type="text" className="border p-2 flex-1 rounded" placeholder="Paste image url here..." value={productData.imageUrl} onChange={(e)=>setProductData({...productData, imageUrl: e.target.value})} />
+                <label className="w-32 font-medium text-left">
+                  Image URL :
+                </label>
+                <input
+                  type="text"
+                  className="border p-2 flex-1 rounded"
+                  placeholder="Paste image url here..."
+                  value={productData.imageUrl}
+                  onChange={(e) =>
+                    setProductData({ ...productData, imageUrl: e.target.value })
+                  }
+                />
               </div>
-              
             </div>
 
             <div className="flex justify-end gap-4 mt-8">
-              <button onClick={handleAddProduct} className="bg-yellow-500 text-white px-8 py-2 rounded-lg font-semibold">ADD</button>
-              <button onClick={()=>setShowProductModal(false)} className="border px-8 py-2 rounded-lg font-semibold">DISCARD</button>
+              <button
+                onClick={handleAddProduct}
+                className="bg-yellow-500 text-white px-8 py-2 rounded-lg font-semibold"
+              >
+                ADD
+              </button>
+              <button
+                onClick={() => setShowProductModal(false)}
+                className="border px-8 py-2 rounded-lg font-semibold"
+              >
+                DISCARD
+              </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

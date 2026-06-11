@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { getSingleProductApi } from "../services/allApis";
+import { getSingleProductApi, addWishlistApi, getWishlistApi } from "../services/allApis";
+import { toast } from "react-toastify";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -13,7 +14,41 @@ function ProductDetails() {
   const [mainImage, setMainImage] = useState("");
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [qty, setQty] = useState(1);
+ 
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
+  const handleWishlist = async () => {
+    try {
+      const reqBody = {
+        userId: sessionStorage.getItem('userId'),
+        productId: id
+      };
+      const result = await addWishlistApi(reqBody);
+      if (result.status === 200) {
+        setIsWishlisted(true);
+        toast.success("Added to Wishlist");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.info("Already in wishlist");
+    }
+  };
+
+  // Check if this product is already in wishlist
+  const checkWishlist = async () => {
+    try {
+      const userId = sessionStorage.getItem('userId');
+      const result = await getWishlistApi(userId);
+      if (result.status === 200) {
+        const ids = result.data.map((item) => item.productId?._id);
+        setIsWishlisted(ids.includes(id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //get single product
   const getSingleProduct = async () => {
     try {
       const result = await getSingleProductApi(id);
@@ -30,6 +65,7 @@ function ProductDetails() {
 
   useEffect(() => {
     getSingleProduct();
+    checkWishlist();
   }, [id]);
 
   const images = [product?.imageUrl, product?.imageUrl];
@@ -189,8 +225,8 @@ function ProductDetails() {
                   Buy It Now
                 </button>
 
-                <button className="border rounded-lg px-4 flex items-center justify-center hover:bg-gray-100">
-                  <CiHeart size={28} />
+                <button onClick={handleWishlist} className="border rounded-lg px-4 flex items-center justify-center hover:bg-gray-100 cursor-pointer">
+                  {isWishlisted ? <FaHeart size={24} className="text-red-500" /> : <CiHeart size={28} />}
                 </button>
               </div>
             </div>

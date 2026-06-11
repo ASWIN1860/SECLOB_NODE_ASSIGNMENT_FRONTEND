@@ -37,11 +37,6 @@ function Header({ searchKey, setSearchKey }) {
               </button>
             </Link>
 
-            <button className="flex items-center gap-0.5 font-medium cursor-pointer">
-              <FaCartArrowDown />
-              Cart
-            </button>
-
             <Link to={'/wishlist'}>
               <button className="flex items-center font-medium cursor-pointer">
                 <CiViewList />

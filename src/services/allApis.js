@@ -66,3 +66,27 @@ export const addProductApi=async(data)=>{
     }
     return await commonApi(`${base_Url}/add-products`,'POST',data,header)
 }
+
+//add wishlist
+export const addWishlistApi=async(reqBody)=>{
+     const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/add-wishlist`,'POST',reqBody,header)
+}
+
+//get wishlist
+export const getWishlistApi=async(userId)=>{
+    const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/wishlist/${userId}`,'GET',"",header)
+}
+
+//remove wishlist
+export const removeWishlistApi=async(id)=>{
+    const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/wishlist/${id}`,'DELETE',"",header)
+}
