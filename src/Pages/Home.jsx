@@ -127,8 +127,8 @@ function Home() {
         page,
       );
 
-      if (result.status === 200) {
-        setProducts(result.data.products || result.data);
+      if (result && result.status === 200) {
+        setProducts(result.data.products || []);
         setTotalPages(result.data.totalPages || 1);
       }
     } catch (err) {
@@ -310,12 +310,12 @@ function Home() {
 
                 <h3 className="font-semibold mt-3">{item.productName}</h3>
 
-                <p className="text-sm text-gray-500">
-                  {item.categoryId?.categoryName}
+                <p className="text-sm text-gray-500 font-semibold">
+                  <span className="font-semibold text-blue-600">Category: </span>{item.categoryId?.categoryName}
                 </p>
 
-                <p className="text-sm text-gray-500">
-                  {item.subCategoryId?.subCategoryName}
+                <p className="text-sm text-gray-500 font-semibold">
+                  <span className="font-semibold text-blue-600">Subcategory: </span>{item.subCategoryId?.subCategoryName}
                 </p>
 
                 <p className="text-yellow-600 font-bold">
@@ -334,36 +334,54 @@ function Home() {
 
           {/* Pagination */}
 
-          <div className="flex justify-center gap-2 mt-8">
-            <button
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-              className="px-3 py-1 bg-gray-200 rounded"
-            >
-              Prev
-            </button>
+          <div className="flex justify-between items-center mt-10 px-2">
+            {/* Left Side */}
 
-            {Array.from({ length: totalPages }, (_, index) => (
+            <p className="text-sm text-black">
+              Showing <span className="font-bold">{products.length}</span> products
+            </p>
+
+            {/* Center Pagination */}
+
+            <div className="flex items-center gap-2">
               <button
-                key={index}
-                onClick={() => setPage(index + 1)}
-                className={`px-3 py-1 rounded ${
-                  page === index + 1
-                    ? "bg-yellow-500 text-white"
-                    : "bg-gray-200"
-                }`}
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+                className="px-2 py-1 text-gray-500 hover:text-black disabled:opacity-40"
               >
-                {index + 1}
+                ❮
               </button>
-            ))}
 
-            <button
-              disabled={page === totalPages}
-              onClick={() => setPage(page + 1)}
-              className="px-3 py-1 bg-gray-200 rounded"
-            >
-              Next
-            </button>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPage(index + 1)}
+                  className={`w-9 h-9 rounded-full text-sm font-medium transition-all duration-200 ${
+                    page === index + 1
+                      ? "bg-yellow-500 text-white shadow-md"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+                className="px-2 py-1 text-gray-500 hover:text-black disabled:opacity-40"
+              >
+                ❯
+              </button>
+            </div>
+
+            {/* Right Side */}
+
+            <div>
+              <div className="border border-gray-300 rounded-md px-3 py-1 text-sm">
+                <h1>{totalPages}</h1>
+              </div>
+            </div>
           </div>
         </main>
       </div>

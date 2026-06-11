@@ -1,113 +1,218 @@
 # React + Vite
 
-# Product Management System
+# Product Management Application
 
-A full-stack Product Management System built using React.js, Node.js, Express.js, and MongoDB.
+A full-stack Product Management Application developed as part of a technical assessment using React.js, Node.js, Express.js, MongoDB, and Tailwind CSS.
+
+---
+
+## Live Demo
+
+Frontend: https://your-vercel-link.vercel.app
+
+Backend: https://your-render-link.onrender.com
+
+---
+
+## GitHub Repositories
+
+### Frontend Repository
+
+https://github.com/ASWIN1860/SECLOB_NODE_ASSIGNMENT_FRONTEND.git
+
+### Backend Repository
+
+https://github.com/ASWIN1860/SECLOB_NODE_ASSIGNMENT_BACKEND.git
+
+---
 
 ## Features
 
-- User Authentication
-  - Sign Up
-  - Sign In
+### Authentication
 
-- Product Management
-  - Add Product
-  - View Products
-  - View Product Details
-  - Edit Product
-  - Delete Product
+- User Signup
+- User Login
+- JWT Authentication
+- Protected Routes
 
-- Category Management
-  - Add Category
-  - View Categories
-  - Delete Category
+### Category Management
+
+- Add Category
+- View Categories
+
+### Sub Category Management
+
+- Add Sub Category
+- View Sub Categories
+- Category-wise Sub Category Mapping
+
+### Product Management
+
+- Add Product
+- View All Products
+- View Single Product Details
+- Update Product
+
+### Product Variants
+
+- Multiple RAM Variants
+- Variant-wise Price
+- Variant-wise Quantity
+
+### Product Listing
+
+- Product Search
+- Sub Category Filter
+- Pagination
+
+### Wishlist
+
+- Add Product to Wishlist
+- View Wishlist
+- Remove Product from Wishlist
+
+### UI Features
+
+- Responsive Design
+- Product Detail Page
+- Variant Selection
+- Toast Notifications
+
+---
 
 ## Tech Stack
 
 ### Frontend
+
 - React.js
 - React Router DOM
-- Tailwind CSS
 - Axios
+- Tailwind CSS
+- React Toastify
+- React Icons
 
 ### Backend
+
 - Node.js
 - Express.js
-
-### Database
 - MongoDB
+- Mongoose
+- JWT
 
-## Installation
+### Deployment
 
+- Frontend : Vercel
+- Backend : Render
+- Database : MongoDB Atlas
 
-### Frontend Setup
-
-cd Frontend
-
-npm install
-
-npm run dev
-
-### Backend Setup
-
-cd Server
-
-npm install
-
-npm start
-
-## Environment Variables
-
-Create a .env file inside Server folder
-
-MONGO_URI=your_mongodb_connection_string
-
-JWT_SECRET=your_secret_key
+---
 
 ## Project Structure
 
-Frontend/
-├── src/
-├── components/
-└── services/
+### Frontend
 
-Server/
-├── controllers/
-├── models/
-├── routes/
-├── middleware/
-└── server.js
+src/
+
+├── components/
+
+├── pages/
+
+├── services/
+
+├── App.jsx
+
+└── main.jsx
+
+### Backend
+
+server/
+
+├── Controllers/
+
+├── Models/
+
+├── Routes/
+
+├── Config/
+
+└── index.js
+
+---
+
+## Environment Variables
+
+Create a `.env` file inside the backend folder.
+
+```env
+PORT=3000
+
+MONGO_URI=your_mongodb_connection_string
+
+SECRET_KEY=your_secret_key
+```
+
+---
 
 ## API Endpoints
 
 ### Authentication
 
-POST /register
-
-POST /login
-
-### Products
-
-GET /products
-
-POST /products
-
-PUT /products/:id
-
-DELETE /products/:id
+- POST /signup
+- POST /signin
 
 ### Categories
 
-GET /categories
+- POST /add-category
+- GET /all-category
 
-POST /categories
+### Sub Categories
 
-DELETE /categories/:id
+- POST /add-subcategory
+- GET /all-subcategory
 
-## Screenshots
+### Products
 
-Add screenshots here
+- POST /add-products
+- GET /all-products
+- GET /single-product/:id
+- PUT /product/:id
+
+### Wishlist
+
+- POST /add-wishlist
+- GET /wishlist/:userId
+- DELETE /wishlist/:id
+
+---
+
+## Pagination Implementation
+
+Pagination is implemented on the backend using MongoDB `skip()` and `limit()` methods.
+
+Features:
+
+- Server-side Pagination
+- Dynamic Page Numbers
+- Previous / Next Navigation
+- Total Page Calculation
+
+---
+
+## AI Usage Disclosure
+
+AI-assisted development tools were used for:
+
+- Code suggestions
+- UI implementation guidance
+- Debugging support
+- Documentation preparation
+
+All application logic, integrations, testing, and final implementation decisions were manually reviewed, modified, and validated before submission.
+
+---
 
 ## Author
 
-Aswin C
+**Aswin C**
+
+MERN Stack Developer
