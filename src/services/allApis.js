@@ -42,3 +42,27 @@ export const getSingleProductApi=async (id)=>{
     }
     return await commonApi(`${base_Url}/single-product/${id}`,'GET',{},header)
 }
+
+//add category
+export const addCategoryApi=async(data)=>{
+    const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/add-category`,'POST',data,header)
+}
+
+//add subcategory
+export const addSubCategoryApi=async(data)=>{
+    const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/add-subcategory`,'POST',data,header)
+}
+
+//add product
+export const addProductApi=async(data)=>{
+    const header={
+        "Authorization":`Token ${sessionStorage.getItem('token')}`
+    }
+    return await commonApi(`${base_Url}/add-products`,'POST',data,header)
+}

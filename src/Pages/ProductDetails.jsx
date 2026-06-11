@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { getSingleProductApi } from "../services/allApis";
 
 function ProductDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [product, setProduct] = useState({});
   const [mainImage, setMainImage] = useState("");
