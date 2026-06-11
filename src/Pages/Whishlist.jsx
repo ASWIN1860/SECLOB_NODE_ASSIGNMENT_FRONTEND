@@ -41,10 +41,10 @@ function Wishlist() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header/>
-      <h1 className="flex  items-center gap-2 text-3xl font-bold mb-6 text-[#003B5C] ps-3"><FaHeart className="text-red-500 text-2xl"/> My Wishlist</h1>
+      <h1 className="flex items-center gap-2 text-xl md:text-3xl font-bold mb-6 text-[#003B5C] px-3 md:ps-3 my-10"><FaHeart className="text-red-500 text-xl md:text-2xl"/> My Wishlist</h1>
 
       {wishlist.length > 0 ? (
-        <div className="grid md:grid-cols-3 gap-6 p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 p-3">
           {wishlist.map((item) => (
             <div key={item._id} className="bg-white rounded-xl shadow-md p-4">
               <img

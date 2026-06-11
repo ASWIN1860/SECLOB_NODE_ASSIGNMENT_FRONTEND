@@ -74,17 +74,17 @@ function ProductDetails() {
     <div className="min-h-screen bg-gray-100">
       <Header />
 
-      <div className="max-w-7xl mx-auto px-8 py-2">
-        <div className="bg-white rounded-xl shadow-md p-5">
-          <div className="grid md:grid-cols-2 gap-12">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-2">
+        <div className="bg-white rounded-xl shadow-md p-4 md:p-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
             {/* LEFT SIDE */}
 
             <div>
-              <div className="border rounded-xl p-3 h-[450px] flex items-center justify-center">
+              <div className="border rounded-xl p-3 h-64 md:h-[450px] flex items-center justify-center">
                 <img
                   src={mainImage}
                   alt=""
-                  className="max-h-[350px] object-contain"
+                  className="max-h-56 md:max-h-[350px] object-contain w-full"
                 />
               </div>
 
@@ -113,8 +113,8 @@ function ProductDetails() {
 
             {/* RIGHT SIDE */}
 
-            <div className="flex flex-col justify-center">
-              <h2 className="text-4xl font-bold text-gray-800">
+            <div className="flex flex-col justify-center mt-4 md:mt-0">
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
                 {product?.productName}
               </h2>
 
@@ -154,7 +154,7 @@ function ProductDetails() {
               <div className="mt-3">
                 <p className="font-semibold mb-3">RAM :</p>
 
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   {product?.variants?.map((item, index) => (
                     <button
                       key={index}
@@ -216,8 +216,8 @@ function ProductDetails() {
 
               {/* Buttons */}
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <button onClick={()=>navigate(`/edit-product/${id}`)} className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600">
+              <div className="mt-6 md:mt-8 flex flex-wrap gap-3">
+                <button onClick={()=>navigate(`/edit-product/${id}`)} className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-600 cursor-pointer">
                   Edit Product
                 </button>
 

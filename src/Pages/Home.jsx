@@ -215,10 +215,10 @@ function Home() {
     <div className="min-h-screen bg-gray-100">
       <Header searchKey={searchKey} setSearchKey={setSearchKey} />
 
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         {/* Sidebar */}
-        <aside className="w-64 h-[91vh] bg-white shadow-lg p-5">
-          <h2 className="font-bold text-2xl text-center mb-4 pt-3">Categories</h2>
+        <aside className="w-full md:w-64 md:min-h-screen bg-white shadow-lg p-5">
+          <h2 className="font-bold text-xl md:text-2xl text-center mb-4 pt-1 md:pt-3">Categories</h2>
 
           <button
             onClick={() => {
@@ -230,8 +230,9 @@ function Home() {
             All Products
           </button>
 
+          <div className="flex flex-wrap md:flex-col gap-2 md:gap-0">
           {categories.map((cat) => (
-            <div key={cat._id} className="mb-4">
+            <div key={cat._id} className="mb-3">
               <h3 className="font-semibold text-[#003B5C]">
                 {cat.categoryName}
               </h3>
@@ -251,35 +252,35 @@ function Home() {
                         setPage(1);
                       }}
                     />
-
                     <label>{sub.subCategoryName}</label>
                   </div>
                 ))}
             </div>
           ))}
+          </div>
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
-          <div className="flex justify-between mb-6">
-            <h2 className="text-3xl font-bold">Products</h2>
+        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold">Products</h2>
 
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => setShowCategoryModal(true)}
-                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer font-semibold"
+                className="bg-yellow-500 text-white px-3 py-2 rounded-lg cursor-pointer font-semibold text-sm"
               >
                 Add Category
               </button>
               <button
                 onClick={() => setShowSubCategoryModal(true)}
-                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer font-semibold"
+                className="bg-yellow-500 text-white px-3 py-2 rounded-lg cursor-pointer font-semibold text-sm"
               >
                 Add SubCategory
               </button>
               <button
                 onClick={() => setShowProductModal(true)}
-                className="bg-yellow-500 text-white px-5 py-2 rounded-lg cursor-pointer font-semibold"
+                className="bg-yellow-500 text-white px-3 py-2 rounded-lg cursor-pointer font-semibold text-sm"
               >
                 Add Product
               </button>
@@ -288,7 +289,7 @@ function Home() {
 
           {/* Product Grid */}
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {products?.map((item) => (
               <div key={item._id} className="bg-white rounded-xl shadow-md p-4">
                 <button
@@ -334,7 +335,7 @@ function Home() {
 
           {/* Pagination */}
 
-          <div className="flex justify-between items-center mt-10 px-2">
+          <div className="flex flex-wrap justify-between items-center mt-10 px-2 gap-3">
             {/* Left Side */}
 
             <p className="text-sm text-black">
@@ -386,10 +387,10 @@ function Home() {
         </main>
       </div>
 
-      {/* Modals */}
+        {/* Add Category Modal */}
       {showCategoryModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-lg shadow-2xl border border-gray-200 w-96 text-center relative pointer-events-auto">
+          <div className="bg-white p-6 rounded-lg shadow-2xl border border-gray-200 w-[90vw] max-w-sm text-center relative pointer-events-auto">
             <button
               onClick={() => setShowCategoryModal(false)}
               className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl"
@@ -424,7 +425,7 @@ function Home() {
 
       {showSubCategoryModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-lg shadow-2xl border border-gray-200 w-96 text-center relative pointer-events-auto">
+          <div className="bg-white p-6 rounded-lg shadow-2xl border border-gray-200 w-[90vw] max-w-sm text-center relative pointer-events-auto">
             <button
               onClick={() => setShowSubCategoryModal(false)}
               className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold text-xl"
@@ -470,8 +471,8 @@ function Home() {
       )}
 
       {showProductModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm">
-          <div className="bg-white p-8 rounded-lg shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative pointer-events-auto">
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white p-5 md:p-8 rounded-lg shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative pointer-events-auto">
             <button
               onClick={() => setShowProductModal(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-red-500 font-bold text-2xl"
@@ -481,11 +482,11 @@ function Home() {
             <h3 className="text-lg font-bold mb-6 text-center">Add Product</h3>
 
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4">
-                <label className="w-32 font-medium text-left">Title :</label>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <label className="w-full sm:w-32 font-medium text-left">Title :</label>
                 <input
                   type="text"
-                  className="border p-2 flex-1 rounded"
+                  className="border p-2 flex-1 rounded w-full"
                   value={productData.productName}
                   onChange={(e) =>
                     setProductData({
@@ -496,11 +497,11 @@ function Home() {
                 />
               </div>
 
-              <div className="flex gap-4">
-                <label className="w-32 font-medium text-left">Variants :</label>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <label className="w-full sm:w-32 font-medium text-left">Variants :</label>
                 <div className="flex-1 flex flex-col gap-2">
                   {productData.variants.map((v, i) => (
-                    <div key={i} className="flex gap-2 items-center">
+                    <div key={i} className="flex flex-wrap gap-2 items-center">
                       <span className="text-sm">Ram :</span>
                       <input
                         type="text"
@@ -513,7 +514,7 @@ function Home() {
                       <span className="text-sm">Price :</span>
                       <input
                         type="number"
-                        className="border p-1 w-24 rounded"
+                        className="border p-1 w-20 rounded"
                         value={v.price}
                         onChange={(e) =>
                           updateVariant(i, "price", e.target.value)
@@ -541,10 +542,10 @@ function Home() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <label className="w-32 font-medium text-left">Category :</label>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <label className="w-full sm:w-32 font-medium text-left">Category :</label>
                 <select
-                  className="border p-2 flex-1 rounded"
+                  className="border p-2 flex-1 rounded w-full"
                   value={productData.categoryId}
                   onChange={(e) =>
                     setProductData({
@@ -562,12 +563,12 @@ function Home() {
                 </select>
               </div>
 
-              <div className="flex items-center gap-4">
-                <label className="w-32 font-medium text-left">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <label className="w-full sm:w-32 font-medium text-left">
                   Sub-category :
                 </label>
                 <select
-                  className="border p-2 flex-1 rounded"
+                  className="border p-2 flex-1 rounded w-full"
                   value={productData.subCategoryId}
                   onChange={(e) =>
                     setProductData({
@@ -591,12 +592,12 @@ function Home() {
                 </select>
               </div>
 
-              <div className="flex gap-4">
-                <label className="w-32 font-medium text-left">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <label className="w-full sm:w-32 font-medium text-left">
                   Description :
                 </label>
                 <textarea
-                  className="border p-2 flex-1 rounded"
+                  className="border p-2 flex-1 rounded w-full"
                   rows="3"
                   value={productData.description}
                   onChange={(e) =>
@@ -608,13 +609,13 @@ function Home() {
                 ></textarea>
               </div>
 
-              <div className="flex items-center gap-4">
-                <label className="w-32 font-medium text-left">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <label className="w-full sm:w-32 font-medium text-left">
                   Image URL :
                 </label>
                 <input
                   type="text"
-                  className="border p-2 flex-1 rounded"
+                  className="border p-2 flex-1 rounded w-full"
                   placeholder="Paste image url here..."
                   value={productData.imageUrl}
                   onChange={(e) =>
